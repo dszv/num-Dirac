@@ -7,9 +7,10 @@ Created on Tue Dec 26 23:04:38 2017
 Numerov method for Dirac equation: 3d step potential
 """
 
-from pylab import *
-from scipy.optimize import brentq
 import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+from scipy.optimize import brentq
 
 l = float(input("Angular momentum l:"))
 L = float(input("Width of the potential:"))
@@ -65,15 +66,14 @@ def main():
         print ("%.2f" %E)
     # Plot the wavefunctions for first 4 eigenstates
     x = np.linspace(0, 3*L, N)
-    figure()
+    plt.figure()
     for E in E_levels:
         Wavefunction(E)
-        plot(x, psi, label="E = %.2f"%E)
-    legend(loc="upper right")
-    xlabel('r')
-    ylabel('$u(r)$', fontsize = 10)
-    grid()
-    savefig('numerovd.pdf', bbox_inches='tight')
+        plt.plot(x, psi, label="E = %.2f"%E)
+    plt.legend(loc="upper right")
+    plt.xlabel('$r$')
+    plt.ylabel('$u(r)$', fontsize = 10)
+    plt.savefig('num_dirac.pdf', bbox_inches='tight')
     
 if __name__ == "__main__":
     main()
