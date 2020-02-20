@@ -72,7 +72,7 @@ def main():
         plt.plot(x, psi, label="E = %.2f"%E)
     plt.legend(loc="upper right")
     plt.xlabel('$r$')
-    plt.ylabel('$u(r)$', fontsize = 10)
+    plt.ylabel('$u(r)$')
     plt.savefig('num_dirac.pdf', bbox_inches='tight')
     
 if __name__ == "__main__":
