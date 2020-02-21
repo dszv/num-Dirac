@@ -14,7 +14,7 @@ from scipy.optimize import brentq
 from scipy import integrate
 
 l, L, Vo = 0.0, 10.0, 1.5 #angular momentum, potential widht, potential value
-h = 0.1 #step value for solve the ode
+h = 0.001 #step value for solve the ode
 e = 0.1 #step value for energies of the eigenstates
 N = int(3*L/h) #number of iterations
 psi = np.zeros(N,dtype="double") #wave function
