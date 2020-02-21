@@ -14,9 +14,10 @@ from scipy.optimize import brentq
 from scipy import integrate
 
 l, L, Vo = 0.0, 10.0, 1.5 #angular momentum, potential width, potential value
+x_max = 2.25*L #maximum value of x (the choice depends of the value of L)
 h = 0.001 #step value for solve the ode
-e = 0.1 #step value for energies of the eigenstates
-N = int(3*L/h) #number of iterations
+e = 0.01 #step value for energies of the eigenstates
+N = int(x_max/h) #number of iterations
 psi = np.zeros(N,dtype="double") #wave function
 psi[0], psi[1] = 0, h #initial conditions
 
@@ -55,13 +56,15 @@ def main():
     
     E_levels = find_E_levels(energies, psi_max) #now find the energies where psi_max = 0
     
-    # Plot the wavefunctions for the eigenstates
-    x = np.linspace(0, 3*L, N)
+    # Plot the wavefunctions for the eigenstates)
+    x = np.linspace(0, x_max, N)
     plt.figure()
     print ("Energies for the bound states are: ")
+    i = 1
     
     for E in E_levels:
-        print ("E =", "%.3f"%E)
+        print (i, "E =", "%.3f"%E)
+        i = i + 1
         Wavef(E)
         Norm = np.sqrt(integrate.simps(psi**2, x)) #finding normalization factor
         psi_norm = psi/Norm
