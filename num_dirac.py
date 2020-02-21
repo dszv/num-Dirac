@@ -11,16 +11,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 from scipy.optimize import brentq
+from scipy import integrate
 
-l, L, Vo = 0.0, 3.0, 1.5 #angular momentum, potential widht, potential value
-x_max = 3*L #max value of x where psi tends to zero
-h = 0.0001 #step value for solve the ode
+l, L, Vo = 0.0, 10.0, 1.5 #angular momentum, potential widht, potential value
+h = 0.1 #step value for solve the ode
 e = 0.1 #step value for energies of the eigenstates
-N = int(x_max/h) #number of iterations
+N = int(3*L/h) #number of iterations
 psi = np.zeros(N,dtype="double") #wave function
 psi[0], psi[1] = 0, h #initial conditions
 
 
+#Effective potential function
 def V(x,E):
     #Effective potential function
     if x > L:
@@ -29,13 +30,13 @@ def V(x,E):
         return -(E+Vo)**2+1+l*(l+1)/x**2
     
 def Wavef(E):
-    # Calculates psi(x_max)
+    #Calculates the psi(3L) = 0
     for i in range(2,N):
         psi[i]=(2*(1+5*(h**2)*V(i*h,E)/12)*psi[i-1]-(1-(h**2)*V((i-1)*h,E)/12)*psi[i-2])/(1-(h**2)*V((i+1)*h,E)/12)       
     return psi[-1]
 
 def find_E_levels(energies,psi_max):
-    # Find all zeroes of psi(3L) = 0
+    #Find all zeroes in psi(3L) = 0
     zeroes = []
     s = np.sign(psi_max)
     for i in range(len(psi_max)-1):
@@ -53,17 +54,19 @@ for E in energies:
 
 E_levels = find_E_levels(energies, psi_max) #now find the energies where psi_max = 0
 
-print ("Energies for the bound states are: ")
-for E in E_levels:
-    print ("%.3f" %E)
-
 # Plot the wavefunctions for the eigenstates
-x = np.linspace(0, x_max, N)
+x = np.linspace(0, 3*L, N)
 plt.figure()
+print ("Energies for the bound states are: ")
 
 for E in E_levels:
+    print ("E =", "%.3f"%E)
     Wavef(E)
-    plt.plot(x, psi, label="E = %.3f"%E)
+    Norm = np.sqrt(integrate.simps(psi**2, x)) #finding normalization factor
+    psi_norm = psi/Norm
+    print("Psi_norm(max):", psi_norm[-1])
+    print ("Norm ->", integrate.simps(psi_norm**2, x))
+    plt.plot(x, psi_norm, label="%.3f"%E)
 
 plt.legend(loc="upper right")
 plt.xlabel('$r$')
