@@ -9,7 +9,7 @@ Numerov method for Dirac equation: 3d step potential
 
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('ggplot')
+plt.style.use('seaborn')
 from scipy.optimize import brentq
 from scipy import integrate
 
