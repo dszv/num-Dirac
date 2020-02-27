@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 26 23:04:38 2017
-
 @author: Diego S
-
 Numerov method for Dirac equation: 3d step potential
 """
 
