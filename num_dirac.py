@@ -22,18 +22,20 @@ psi = np.zeros(N,dtype="double") #wave function
 psi[0], psi[1] = 0, h #initial conditions
 
 
-#Effective potential function
 def V(x,E):
     #Effective potential function
-    if x > L:
+    if (x > L):
         return -E**2+1+l*(l+1)/x**2
     else:
-        return -(E+Vo)**2+1+l*(l+1)/x**2
+        if (x == 0):
+            return -(E+Vo)**2+1+l*(l+1)/h**2
+        else:
+            return -(E+Vo)**2+1+l*(l+1)/x**2
     
 def Wavef(E):
     #Calculates the psi(3L) = 0
-    for i in range(2, N):
-        psi[i] = (2 * (1 + 5 * (h**2) * V(i*h, E)/12) * psi[i-1] - (1 - (h**2) * V((i-1)*h, E)/12) * psi[i-2])/(1 - (h**2) * V((i+1) * h, E)/12)
+    for i in range(1, N-1):
+        psi[i+1] = (2 * (1 + 5 * (h**2) * V(i*h, E)/12) * psi[i] - (1 - (h**2) * V((i-1)*h, E)/12) * psi[i-1])/(1 - (h**2) * V((i+1) * h, E)/12)
     return psi[-1]
 
 def find_E_levels(energies,psi_max):
@@ -41,7 +43,7 @@ def find_E_levels(energies,psi_max):
     zeroes = []
     s = np.sign(psi_max)
     for i in range(len(psi_max)-1):
-        if s[i]+s[i+1] == 0: #sign change
+        if (s[i]+s[i+1] == 0): #sign change
             zero = brentq(Wavef, energies[i], energies[i+1])
             zeroes.append(zero)
     return zeroes
