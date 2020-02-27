@@ -21,7 +21,7 @@ psi[0], psi[1] = 0, h #initial conditions
 
 
 def V(x,E):
-    # effective (minus) potential function
+    # (minus) effective potential function
     if (x > L):
         return -E**2+1+l*(l+1)/x**2
     else:
