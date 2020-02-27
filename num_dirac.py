@@ -23,7 +23,7 @@ psi[0], psi[1] = 0, h #initial conditions
 
 
 def V(x,E):
-    #Effective potential function
+    # effective (minus) potential function
     if (x > L):
         return -E**2+1+l*(l+1)/x**2
     else:
@@ -33,13 +33,13 @@ def V(x,E):
             return -(E+Vo)**2+1+l*(l+1)/x**2
     
 def Wavef(E):
-    #Calculates the psi(3L) = 0
+    # calculates the psi(x_max)
     for i in range(1, N-1):
         psi[i+1] = (2 * (1 + 5 * (h**2) * V(i*h, E)/12) * psi[i] - (1 - (h**2) * V((i-1)*h, E)/12) * psi[i-1])/(1 - (h**2) * V((i+1) * h, E)/12)
     return psi[-1]
 
 def find_E_levels(energies,psi_max):
-    #Find all zeroes in psi(3L) = 0
+    # find all zeroes in psi(x_max) = 0
     zeroes = []
     s = np.sign(psi_max)
     for i in range(len(psi_max)-1):
@@ -50,15 +50,15 @@ def find_E_levels(energies,psi_max):
 
 
 def main():
-    energies = np.linspace(-1, 1, int(2/e)) #vector of energies where we look for the stable states
+    energies = np.linspace(-1, 1, int(2/e)) # vector of energies where we look for the stable states
     psi_max = []  # vector for values of the wave function at x = 3L
     
     for E in energies:
-        psi_max.append(Wavef(E)) #for each energy find the psi_max at xmax
+        psi_max.append(Wavef(E)) # for each energy find the psi at xmax
     
-    E_levels = find_E_levels(energies, psi_max) #now find the energies where psi_max = 0
+    E_levels = find_E_levels(energies, psi_max)
     
-    # Plot the wavefunctions for the eigenstates)
+    # plot the wavefunctions for the eigenstates)
     x = np.linspace(0, x_max, N)
     plt.figure()
     print ("Energies for the bound states are: ")
@@ -68,7 +68,7 @@ def main():
         print (i, "E =", "%.3f"%E)
         i = i + 1
         Wavef(E)
-        Norm = np.sqrt(integrate.simps(psi**2, x)) #finding normalization factor
+        Norm = np.sqrt(integrate.simps(psi**2, x)) # finding normalization factor
         psi_norm = psi/Norm
         print("Psi_norm(max):", psi_norm[-1])
         print ("Norm ->", integrate.simps(psi_norm**2, x))
