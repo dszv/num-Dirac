@@ -4,7 +4,7 @@ plt.style.use('seaborn')
 from scipy.optimize import brentq
 from scipy import integrate
 
-l, L, Vo = 0.0, 5.0, 1.5 # angular momentum, potential width, potential value
+l, L, Vo = 1.0, 5.0, 1.5 # angular momentum, potential width, potential value
 x_max = 3*L # maximum value of x (the choice depends of the value of L)
 h = 0.0001 # step value for solve the ode
 e = 0.01 # step value for energies of the eigenstates
@@ -44,22 +44,24 @@ def main():
     u_max = []  # vector for values of the wave function at x_max
     
     for E in energies:
-        u_max.append(wavef(E)) # for each energy find the psi at x_max
+        u_max.append(wavef(E)) # for each energy find the u at x_max
     
     E_levels = find_E_levels(energies, u_max)
     
-    # plot the wavefunctions for the eigenstates)
+    # plotting the wavefunctions for the eigenstates
     x = np.linspace(0, x_max, N)
     y = np.zeros(N)
     y[0] = 1/(h**2)
     for i in range(1, N):
         y[i] = 1/x[i]
-    plt.figure()
-    print ("The energies for the bound states are: ")
+    fig = plt.figure(figsize=(12, 4))
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+    print ("The energies of the bound states are: ")
 
     i = 1
     for E in E_levels:
-        print (i, "E =", "%.4f"%E)
+        print (i, ". E =", "%.4f"%E)
         i = i + 1
         wavef(E)
         norm = np.sqrt(integrate.simps(u**2, x)) # finding normalization factor
@@ -68,11 +70,16 @@ def main():
         g[0] = g[1]
         print("g(x_max):", g[-1])
         print ("Norm ->", integrate.simps(u_norm**2, x))
-        plt.plot(x, g, label="%.4f"%E)
+        ax1.plot(x, g, label="%.4f"%E)
+        ax2.plot(x, u_norm, label="%.4f"%E)
+       
+    ax1.set_xlabel('$r$')
+    ax1.set_ylabel('$g(r)$')
+    ax1.legend(loc="upper right")
+    ax2.set_xlabel('$r$')
+    ax2.set_ylabel('$u(r)$')
+    ax2.legend(loc="upper right")
     
-    plt.legend(loc="upper right")
-    plt.xlabel('$r$')
-    plt.ylabel('$g(r)$')
     plt.tight_layout()
     plt.savefig('wavefunction.pdf')
     plt.show()
